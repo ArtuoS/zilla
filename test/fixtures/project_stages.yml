@@ -1,0 +1,20 @@
+one_copywriting:
+  project: alice_project_one
+  stage: copywriting
+  status: completed
+  output: Here is the punchy copy.
+
+one_landing:
+  project: alice_project_one
+  stage: landing_page
+  status: pending
+
+two_copywriting:
+  project: alice_project_two
+  stage: copywriting
+  status: pending
+
+two_landing:
+  project: alice_project_two
+  stage: landing_page
+  status: pending

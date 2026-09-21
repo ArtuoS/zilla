@@ -1,0 +1,12 @@
+menopause_guide:
+  owner: alice
+  name: Menopause Guide
+  description: A PDF guide about menopause
+
+empty_product:
+  owner: alice
+  name: Product With No Stages
+
+dave_product:
+  owner: dave
+  name: Dave's Private Product

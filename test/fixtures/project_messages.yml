@@ -1,0 +1,12 @@
+alice_asks_for_punchier_copy:
+  project: alice_project_one
+  project_stage: one_copywriting
+  sender_type: user_sender
+  user: alice
+  content: Can you make this punchier?
+
+agent_replies_with_punchier_copy:
+  project: alice_project_one
+  project_stage: one_copywriting
+  sender_type: agent_sender
+  content: Sure, here is a punchier version.

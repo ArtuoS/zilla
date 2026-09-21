@@ -1,0 +1,9 @@
+bob_admin_on_menopause_guide:
+  product: menopause_guide
+  user: bob
+  access_level: admin
+
+carol_viewer_on_menopause_guide:
+  product: menopause_guide
+  user: carol
+  access_level: viewer

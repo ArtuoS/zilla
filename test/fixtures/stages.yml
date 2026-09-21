@@ -1,0 +1,11 @@
+copywriting:
+  product: menopause_guide
+  name: Copywriting
+  initial_prompt: Write persuasive copy for a menopause guide.
+  sequence_order: 1
+
+landing_page:
+  product: menopause_guide
+  name: Landing Page
+  initial_prompt: Build a landing page for the menopause guide.
+  sequence_order: 2
