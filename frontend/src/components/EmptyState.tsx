@@ -1,0 +1,10 @@
+import type { ReactNode } from 'react'
+
+export function EmptyState({ title, children }: { title: string; children?: ReactNode }) {
+  return (
+    <div className="rounded-md border border-dashed border-gray-300 px-4 py-8 text-center">
+      <p className="text-sm font-medium text-gray-900">{title}</p>
+      {children && <div className="mt-2 text-sm text-gray-500">{children}</div>}
+    </div>
+  )
+}

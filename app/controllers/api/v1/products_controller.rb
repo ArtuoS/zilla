@@ -1,11 +1,12 @@
 class Api::V1::ProductsController < ApplicationController
   def index
-    render json: policy_scope(Product)
+    products = policy_scope(Product).includes(:owner, :permissions)
+    render json: products.map { |product| product_json(product) }
   end
 
   def show
     product = find_product
-    render json: product
+    render json: product_json(product)
   end
 
   def create
@@ -13,7 +14,7 @@ class Api::V1::ProductsController < ApplicationController
     authorize product, :create?
 
     if product.save
-      render json: product, status: :created
+      render json: product_json(product), status: :created
     else
       render json: { errors: product.errors.full_messages }, status: :unprocessable_entity
     end
@@ -24,7 +25,7 @@ class Api::V1::ProductsController < ApplicationController
     authorize product, :update?
 
     if product.update(product_params)
-      render json: product
+      render json: product_json(product)
     else
       render json: { errors: product.errors.full_messages }, status: :unprocessable_entity
     end
@@ -45,5 +46,12 @@ class Api::V1::ProductsController < ApplicationController
 
   def product_params
     params.require(:product).permit(:name, :description)
+  end
+
+  def product_json(product)
+    product.as_json.merge(
+      access_level: Pundit.policy(current_user, product).access_level,
+      owner: product.owner.as_json(only: [ :id, :name, :surname, :email ])
+    )
   end
 end

@@ -1,0 +1,58 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "rdbg",
+      "name": "Debug Rails server",
+      "request": "launch",
+      "script": "bin/rails",
+      "args": ["server"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "DATABASE_URL": "postgres://zilla:zilla@localhost:5432/zilla_development"
+      },
+      "askParameters": false
+    },
+    {
+      "type": "rdbg",
+      "name": "Debug Rails console",
+      "request": "launch",
+      "script": "bin/rails",
+      "args": ["console"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "DATABASE_URL": "postgres://zilla:zilla@localhost:5432/zilla_development"
+      },
+      "askParameters": false
+    },
+    {
+      "type": "rdbg",
+      "name": "Debug current test file",
+      "request": "launch",
+      "script": "bin/rails",
+      "args": ["test", "${relativeFile}"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "DATABASE_URL": "postgres://zilla:zilla@localhost:5432/zilla_test"
+      },
+      "askParameters": false
+    },
+    {
+      "type": "rdbg",
+      "name": "Debug full test suite",
+      "request": "launch",
+      "script": "bin/rails",
+      "args": ["test"],
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "DATABASE_URL": "postgres://zilla:zilla@localhost:5432/zilla_test"
+      },
+      "askParameters": false
+    },
+    {
+      "type": "rdbg",
+      "name": "Attach to running rdbg process",
+      "request": "attach"
+    }
+  ]
+}

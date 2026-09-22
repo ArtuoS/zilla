@@ -1,0 +1,71 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Postgres: up",
+      "type": "shell",
+      "command": "docker compose up -d postgres",
+      "problemMatcher": []
+    },
+    {
+      "label": "Rails: db create + migrate",
+      "type": "shell",
+      "command": "bin/rails db:create db:migrate",
+      "options": {
+        "env": {
+          "DATABASE_URL": "postgres://zilla:zilla@localhost:5432/zilla_development"
+        }
+      },
+      "dependsOn": ["Postgres: up"],
+      "problemMatcher": []
+    },
+    {
+      "label": "Rails: server",
+      "type": "shell",
+      "command": "bin/rails server",
+      "isBackground": true,
+      "options": {
+        "env": {
+          "DATABASE_URL": "postgres://zilla:zilla@localhost:5432/zilla_development"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Rails: jobs (Solid Queue)",
+      "type": "shell",
+      "command": "bin/jobs",
+      "isBackground": true,
+      "options": {
+        "env": {
+          "DATABASE_URL": "postgres://zilla:zilla@localhost:5432/zilla_development"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Rails: test",
+      "type": "shell",
+      "command": "bin/rails test",
+      "group": { "kind": "test", "isDefault": true },
+      "options": {
+        "env": {
+          "DATABASE_URL": "postgres://zilla:zilla@localhost:5432/zilla_test"
+        }
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Rails: rubocop",
+      "type": "shell",
+      "command": "bin/rubocop",
+      "problemMatcher": []
+    },
+    {
+      "label": "Rails: brakeman",
+      "type": "shell",
+      "command": "bin/brakeman -q",
+      "problemMatcher": []
+    }
+  ]
+}

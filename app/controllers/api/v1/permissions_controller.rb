@@ -4,7 +4,7 @@ class Api::V1::PermissionsController < ApplicationController
   def index
     product = find_product
     authorize product, :view?
-    render json: product.permissions.includes(:user)
+    render json: product.permissions.includes(:user).map { |permission| permission_json(permission) }
   end
 
   def create
@@ -45,5 +45,13 @@ class Api::V1::PermissionsController < ApplicationController
     permission = product.permissions.find(params[:id])
     permission.destroy!
     head :ok
+  end
+
+  private
+
+  def permission_json(permission)
+    permission.as_json(except: [ :user_id ]).merge(
+      user: permission.user.as_json(only: [ :id, :name, :surname, :email ])
+    )
   end
 end

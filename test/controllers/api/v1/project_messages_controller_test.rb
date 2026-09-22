@@ -44,4 +44,18 @@ class Api::V1::ProjectMessagesControllerTest < ActionDispatch::IntegrationTest
       headers: auth_headers(users(:alice))
     assert_response :not_found
   end
+
+  test "a user message nests the sender's user attributes; an agent message nests null (FR-11)" do
+    get api_v1_project_project_stage_messages_path(projects(:alice_project_one), project_stages(:one_copywriting)),
+      headers: auth_headers(users(:alice))
+    body = JSON.parse(response.body)
+
+    user_message = body.find { |m| m["sender_type"] == "user_sender" }
+    assert_equal users(:alice).id, user_message["user"]["id"]
+    assert_equal users(:alice).name, user_message["user"]["name"]
+    assert_equal users(:alice).surname, user_message["user"]["surname"]
+
+    agent_message = body.find { |m| m["sender_type"] == "agent_sender" }
+    assert_nil agent_message["user"]
+  end
 end

@@ -23,6 +23,21 @@ class Api::V1::ProductsControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes ids, products(:dave_product).id
   end
 
+  test "index and show label each product with the current user's access_level and owner (FR-4)" do
+    get api_v1_products_path, headers: auth_headers(users(:bob))
+    body = JSON.parse(response.body)
+    menopause_guide_json = body.find { |p| p["id"] == products(:menopause_guide).id }
+    assert_equal "admin", menopause_guide_json["access_level"]
+    assert_equal users(:alice).id, menopause_guide_json["owner"]["id"]
+    assert_equal users(:alice).email, menopause_guide_json["owner"]["email"]
+
+    get api_v1_product_path(products(:menopause_guide)), headers: auth_headers(users(:carol))
+    assert_equal "viewer", JSON.parse(response.body)["access_level"]
+
+    get api_v1_product_path(products(:menopause_guide)), headers: auth_headers(users(:alice))
+    assert_equal "owner", JSON.parse(response.body)["access_level"]
+  end
+
   test "show is not reachable for a product the user doesn't own or have shared access to (NFR-3)" do
     get api_v1_product_path(products(:dave_product)), headers: auth_headers(users(:alice))
     assert_response :not_found

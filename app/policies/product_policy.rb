@@ -21,6 +21,13 @@ class ProductPolicy < ApplicationPolicy
     owner?
   end
 
+  # "owner" | "admin" | "viewer" | nil (no access at all)
+  def access_level
+    return "owner" if owner?
+
+    permission&.access_level
+  end
+
   class Scope < ApplicationPolicy::Scope
     def resolve
       scope.left_joins(:permissions)

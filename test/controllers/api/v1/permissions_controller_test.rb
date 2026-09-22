@@ -35,6 +35,18 @@ class Api::V1::PermissionsControllerTest < ActionDispatch::IntegrationTest
     assert_equal "admin", permissions(:carol_viewer_on_menopause_guide).reload.access_level
   end
 
+  test "index nests each collaborator's user attributes instead of a bare user_id (FR-16)" do
+    get api_v1_product_permissions_path(products(:menopause_guide)), headers: auth_headers(users(:alice))
+    assert_response :success
+    body = JSON.parse(response.body)
+    bob_entry = body.find { |p| p["id"] == permissions(:bob_admin_on_menopause_guide).id }
+    assert_nil bob_entry["user_id"]
+    assert_equal users(:bob).id, bob_entry["user"]["id"]
+    assert_equal users(:bob).name, bob_entry["user"]["name"]
+    assert_equal users(:bob).surname, bob_entry["user"]["surname"]
+    assert_equal users(:bob).email, bob_entry["user"]["email"]
+  end
+
   test "viewer sees the product read-only (Scenario 12)" do
     get api_v1_product_path(products(:menopause_guide)), headers: auth_headers(users(:carol))
     assert_response :success

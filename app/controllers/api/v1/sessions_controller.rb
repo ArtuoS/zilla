@@ -5,8 +5,8 @@ class Api::V1::SessionsController < ApplicationController
     user = User.find_by("LOWER(email) = ?", params[:email].to_s.downcase)
 
     if user&.authenticate(params[:password])
-      token = JsonWebToken.encode(user_id: user.id)
-      render json: { token: token }, status: :ok
+      token = JsonWebToken.encode({ user_id: user.id })
+      render json: { token: token, user: user.as_json(only: [ :id, :name, :surname, :email ]) }, status: :ok
     else
       render json: { error: "Invalid email or password" }, status: :unauthorized
     end

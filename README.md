@@ -51,3 +51,33 @@ All endpoints are under `/api/v1` and return JSON. Authentication is a bearer JW
 
 See `specs/001-product-builder-core-workflow/plan.md` for the full route list and
 data model.
+
+## Frontend (`/frontend`)
+
+React + Vite + TypeScript, Tailwind CSS, TanStack Query, React Router, and
+`@rails/actioncable` for the real-time chat updates. See
+`specs/002-web-app-frontend/plan.md` for the full architecture.
+
+```
+cd frontend
+npm install
+cp .env.example .env   # then adjust VITE_API_BASE_URL / VITE_WS_BASE_URL if needed
+npm run dev             # http://localhost:5173, expects the Rails API at :3000
+```
+
+Required env vars (`frontend/.env`, see `.env.example`):
+
+| Variable | Purpose | Default |
+|---|---|---|
+| `VITE_API_BASE_URL` | The Rails API's base URL | `http://localhost:3000/api/v1` |
+| `VITE_WS_BASE_URL` | The Rails API's Action Cable endpoint | `ws://localhost:3000/cable` |
+
+Other npm scripts (run from `/frontend`):
+
+```
+npm run lint        # ESLint
+npx tsc -b          # Typecheck
+npm run test         # Vitest (unit/component tests)
+npm run build        # Production build
+npm run e2e          # Playwright end-to-end tests (needs a live Rails API + Postgres)
+```

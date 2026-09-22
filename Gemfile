@@ -4,6 +4,12 @@ source "https://rubygems.org"
 gem "rails", "~> 8.1.3", ">= 8.1.3.1"
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
+# Pinned below 3.0: json 3.0 tightened JSON.parse to keyword-only options
+# (on_load:/object_class:/array_class:/**), which breaks
+# ActiveSupport::JSON.decode (activesupport 8.1.3.1 still calls
+# JSON.parse(json, options) positionally) with
+# "wrong number of arguments (given 2, expected 1)" on every JSON request body.
+gem "json", "< 3.0"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]

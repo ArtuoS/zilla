@@ -39,6 +39,16 @@ class Api::V1::ProjectsControllerTest < ActionDispatch::IntegrationTest
     assert_not_equal one_body["project_stages"], two_body["project_stages"]
   end
 
+  test "each project_stage nests its stage's id, name, and sequence_order (FR-9)" do
+    get api_v1_project_path(projects(:alice_project_one)), headers: auth_headers(users(:alice))
+    body = JSON.parse(response.body)
+    copywriting_entry = body["project_stages"].find { |ps| ps["stage_id"] == stages(:copywriting).id }
+
+    assert_equal stages(:copywriting).id, copywriting_entry["stage"]["id"]
+    assert_equal stages(:copywriting).name, copywriting_entry["stage"]["name"]
+    assert_equal stages(:copywriting).sequence_order, copywriting_entry["stage"]["sequence_order"]
+  end
+
   test "viewer cannot create a project (FR-22, Edge Case)" do
     assert_no_difference "Project.count" do
       post api_v1_product_projects_path(products(:menopause_guide)), headers: auth_headers(users(:carol))

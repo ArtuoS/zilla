@@ -29,4 +29,21 @@ class Api::V1::ProjectStagesControllerTest < ActionDispatch::IntegrationTest
       headers: auth_headers(users(:carol))
     assert_response :forbidden
   end
+
+  test "index and show nest the stage's id, name, description, initial_prompt, sequence_order (FR-10, FR-13)" do
+    get api_v1_project_project_stage_path(projects(:alice_project_one), project_stages(:one_copywriting)),
+      headers: auth_headers(users(:alice))
+    assert_response :success
+    stage_json = JSON.parse(response.body)["stage"]
+
+    assert_equal stages(:copywriting).id, stage_json["id"]
+    assert_equal stages(:copywriting).name, stage_json["name"]
+    assert_equal stages(:copywriting).description, stage_json["description"]
+    assert_equal stages(:copywriting).initial_prompt, stage_json["initial_prompt"]
+    assert_equal stages(:copywriting).sequence_order, stage_json["sequence_order"]
+
+    get api_v1_project_project_stages_path(projects(:alice_project_one)), headers: auth_headers(users(:alice))
+    body = JSON.parse(response.body)
+    assert(body.all? { |ps| ps["stage"]["id"].present? })
+  end
 end

@@ -36,8 +36,10 @@ class Api::V1::ProjectsController < ApplicationController
 
   def project_json(project)
     project.as_json.merge(
-      project_stages: project.project_stages.joins(:stage).order("stages.sequence_order").map { |ps|
-        ps.as_json(only: [ :id, :stage_id, :status, :output, :started_at, :completed_at ])
+      project_stages: project.project_stages.includes(:stage).joins(:stage).order("stages.sequence_order").map { |ps|
+        ps.as_json(only: [ :id, :stage_id, :status, :output, :started_at, :completed_at ]).merge(
+          stage: ps.stage.as_json(only: [ :id, :name, :sequence_order ])
+        )
       }
     )
   end

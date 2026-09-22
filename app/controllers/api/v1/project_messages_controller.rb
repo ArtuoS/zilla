@@ -4,7 +4,8 @@ class Api::V1::ProjectMessagesController < ApplicationController
   def index
     project_stage = find_project_stage
     authorize project_stage.project.product, :view?
-    render json: project_stage.project_messages.order(:created_at)
+    messages = project_stage.project_messages.includes(:user).order(:created_at)
+    render json: messages.map { |message| message_json(message) }
   end
 
   def create
@@ -21,7 +22,7 @@ class Api::V1::ProjectMessagesController < ApplicationController
     if message.save
       project_stage.update!(status: :running) unless project_stage.running?
       AgentRespondJob.perform_later(project_stage.id)
-      render json: message, status: :created
+      render json: message_json(message), status: :created
     else
       render json: { errors: message.errors.full_messages }, status: :unprocessable_entity
     end
@@ -36,5 +37,11 @@ class Api::V1::ProjectMessagesController < ApplicationController
 
   def message_params
     params.require(:project_message).permit(:content)
+  end
+
+  def message_json(message)
+    message.as_json(except: [ :user_id ]).merge(
+      user: message.user&.as_json(only: [ :id, :name, :surname ])
+    )
   end
 end
