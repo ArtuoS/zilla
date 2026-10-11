@@ -3,7 +3,7 @@ source "https://rubygems.org"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 8.1.3", ">= 8.1.3.1"
 # Use postgresql as the database for Active Record
-gem "pg", "~> 1.1"
+gem "pg", "~> 1.7"
 # Pinned below 3.0: json 3.0 tightened JSON.parse to keyword-only options
 # (on_load:/object_class:/array_class:/**), which breaks
 # ActiveSupport::JSON.decode (activesupport 8.1.3.1 still calls
