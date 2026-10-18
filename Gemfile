@@ -9,7 +9,7 @@ gem "pg", "~> 1.1"
 # ActiveSupport::JSON.decode (activesupport 8.1.3.1 still calls
 # JSON.parse(json, options) positionally) with
 # "wrong number of arguments (given 2, expected 1)" on every JSON request body.
-gem "json", "< 3.0"
+gem "json", "< 4.0"
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
